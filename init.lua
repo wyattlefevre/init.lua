@@ -86,7 +86,7 @@ require('lazy').setup({
 
       -- Useful status updates for LSP
       -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-      { 'j-hui/fidget.nvim', tag = 'legacy', opts = {} },
+      { 'j-hui/fidget.nvim',       tag = 'legacy', opts = {} },
 
       -- Additional lua configuration, makes nvim stuff amazing!
       'folke/neodev.nvim',
@@ -110,7 +110,7 @@ require('lazy').setup({
   },
 
   -- Useful plugin to show you pending keybinds.
-  { 'folke/which-key.nvim', opts = {} },
+  { 'folke/which-key.nvim',  opts = {} },
   {
     -- Adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
@@ -124,22 +124,13 @@ require('lazy').setup({
         changedelete = { text = '~' },
       },
       on_attach = function(bufnr)
-        vim.keymap.set('n', '<leader>gp', require('gitsigns').prev_hunk, { buffer = bufnr, desc = '[G]o to [P]revious Hunk' })
+        vim.keymap.set('n', '<leader>gp', require('gitsigns').prev_hunk,
+          { buffer = bufnr, desc = '[G]o to [P]revious Hunk' })
         vim.keymap.set('n', '<leader>gn', require('gitsigns').next_hunk, { buffer = bufnr, desc = '[G]o to [N]ext Hunk' })
         vim.keymap.set('n', '<leader>ph', require('gitsigns').preview_hunk, { buffer = bufnr, desc = '[P]review [H]unk' })
       end,
     },
   },
-
-  {
-    -- Theme inspired by Atom
-    'navarasu/onedark.nvim',
-    priority = 1000,
-    config = function()
-      vim.cmd.colorscheme 'onedark'
-    end,
-  },
-
   {
     -- Set lualine as statusline
     'nvim-lualine/lualine.nvim',
@@ -167,6 +158,34 @@ require('lazy').setup({
 
   -- "gc" to comment visual regions/lines
   { 'numToStr/Comment.nvim', opts = {} },
+
+  -- Fuzzy Finder (files, lsp, etc)
+  {
+    'nvim-telescope/telescope.nvim',
+    branch = '0.1.x',
+    keys = {
+      {
+        "<leader>f",
+        "<cmd>lua require'telescope.builtin'.find_files({ find_command = {'rg', '-u', '--files', '--hidden', '-g', '!.git' }})<cr>",
+        desc = "Telescope find_files"
+      },
+    },
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      -- Fuzzy Finder Algorithm which requires local dependencies to be built.
+      -- Only load if `make` is available. Make sure you have the system
+      -- requirements installed.
+      {
+        'nvim-telescope/telescope-fzf-native.nvim',
+        -- NOTE: If you are having trouble with this installation,
+        --       refer to the README for telescope-fzf-native for more instructions.
+        build = 'make',
+        cond = function()
+          return vim.fn.executable 'make' == 1
+        end,
+      },
+    },
+  },
 
   {
     -- Highlight, edit, and navigate code
@@ -233,6 +252,8 @@ vim.o.completeopt = 'menuone,noselect'
 -- NOTE: You should make sure your terminal supports this
 vim.o.termguicolors = true
 
+vim.o.noswapfile = true
+
 -- [[ Basic Keymaps ]]
 
 -- Keymaps for better default experience
@@ -256,16 +277,79 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 
 -- [[ Configure Telescope ]]
 -- See `:help telescope` and `:help telescope.setup()`
--- require('telescope').setup {
---   defaults = {
---     mappings = {
---       i = {
---         ['<C-u>'] = false,
---         ['<C-d>'] = false,
---       },
---     },
---   },
--- }
+local actions = require("telescope.actions")
+require('telescope').setup {
+  defaults = {
+    prompt_prefix = " ",
+    selection_caret = " ",
+    path_display = { "smart" },
+
+    mappings = {
+      i = {
+        ["<C-n>"] = actions.cycle_history_next,
+        ["<C-p>"] = actions.cycle_history_prev,
+
+        ["<C-j>"] = actions.move_selection_next,
+        ["<C-k>"] = actions.move_selection_previous,
+
+        ["<C-c>"] = actions.close,
+
+        ["<Down>"] = actions.move_selection_next,
+        ["<Up>"] = actions.move_selection_previous,
+
+        ["<CR>"] = actions.select_default,
+        ["<C-x>"] = actions.select_horizontal,
+        ["<C-v>"] = actions.select_vertical,
+        ["<C-t>"] = actions.select_tab,
+
+        ["<C-u>"] = actions.preview_scrolling_up,
+        ["<C-d>"] = actions.preview_scrolling_down,
+
+        ["<PageUp>"] = actions.results_scrolling_up,
+        ["<PageDown>"] = actions.results_scrolling_down,
+
+        ["<Tab>"] = actions.toggle_selection + actions.move_selection_worse,
+        ["<S-Tab>"] = actions.toggle_selection + actions.move_selection_better,
+        ["<C-q>"] = actions.send_to_qflist + actions.open_qflist,
+        ["<M-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
+        ["<C-l>"] = actions.complete_tag,
+        ["<C-_>"] = actions.which_key, -- keys from pressing <C-/>
+      },
+
+      n = {
+        ["<esc>"] = actions.close,
+        ["<CR>"] = actions.select_default,
+        ["<C-x>"] = actions.select_horizontal,
+        ["<C-v>"] = actions.select_vertical,
+        ["<C-t>"] = actions.select_tab,
+
+        ["<Tab>"] = actions.toggle_selection + actions.move_selection_worse,
+        ["<S-Tab>"] = actions.toggle_selection + actions.move_selection_better,
+        ["<C-q>"] = actions.send_to_qflist + actions.open_qflist,
+        ["<M-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
+
+        ["j"] = actions.move_selection_next,
+        ["k"] = actions.move_selection_previous,
+        ["H"] = actions.move_to_top,
+        ["M"] = actions.move_to_middle,
+        ["L"] = actions.move_to_bottom,
+
+        ["<Down>"] = actions.move_selection_next,
+        ["<Up>"] = actions.move_selection_previous,
+        ["gg"] = actions.move_to_top,
+        ["G"] = actions.move_to_bottom,
+
+        ["<C-u>"] = actions.preview_scrolling_up,
+        ["<C-d>"] = actions.preview_scrolling_down,
+
+        ["<PageUp>"] = actions.results_scrolling_up,
+        ["<PageDown>"] = actions.results_scrolling_down,
+
+        ["?"] = actions.which_key,
+      },
+    },
+  },
+}
 
 -- Enable telescope fzf native, if installed
 pcall(require('telescope').load_extension, 'fzf')
