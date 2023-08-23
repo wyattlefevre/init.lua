@@ -18,7 +18,7 @@ else
     'navarasu/onedark.nvim',
     config = function()
       require('onedark').setup({
-        style = 'warm',
+        style = 'dark',
         transparent = true, -- Show/hide background
         toggle_style_key = '<leader>ts'
       })
