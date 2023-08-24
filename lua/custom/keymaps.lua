@@ -19,3 +19,7 @@ vim.keymap.set("n", "<C-c>h", "<C-w>v<C-w>h<C-w>h:close<CR><C-w>l", default_opts
 
 -- Clear highlight (search) with esc
 vim.keymap.set('n', '<ESC>', ':noh<CR>', default_opts)
+
+-- Keep code centered on jump up/down
+vim.keymap.set('n', '<C-d>', '<C-d>zz')
+vim.keymap.set('n', '<C-u>', '<C-u>zz')
