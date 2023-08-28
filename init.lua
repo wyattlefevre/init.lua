@@ -217,6 +217,8 @@ vim.o.swapfile = false
 
 vim.o.relativenumber = true
 
+vim.o.tabstop = 4
+
 -- [[ Basic Keymaps ]]
 
 require ('custom.keymaps')
