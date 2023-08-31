@@ -14,17 +14,47 @@ if envTheme == "LIGHT" then
     end
   }
 else
+  -- return {
+  --   'navarasu/onedark.nvim',
+  --   config = function()
+  --     require('onedark').setup({
+  --       style = 'dark',
+  --       transparent = true, -- Show/hide background
+  --       toggle_style_key = '<leader>ts'
+  --     })
+  --     require('onedark').load()
+  --     vim.o.bg = 'dark'
+  --   end
+  -- }
   return {
-    'navarasu/onedark.nvim',
+    'rebelot/kanagawa.nvim',
     config = function()
-      require('onedark').setup({
-        style = 'dark',
-        transparent = true, -- Show/hide background
-        toggle_style_key = '<leader>ts'
+      require('kanagawa').setup({
+        compile = false,  -- enable compiling the colorscheme
+        undercurl = true, -- enable undercurls
+        commentStyle = { italic = true },
+        functionStyle = {},
+        keywordStyle = { italic = true },
+        statementStyle = { bold = true },
+        typeStyle = {},
+        transparent = true,   -- do not set background color
+        dimInactive = false,   -- dim inactive window `:h hl-NormalNC`
+        terminalColors = true, -- define vim.g.terminal_color_{0,17}
+        colors = {             -- add/modify theme and palette colors
+          palette = {},
+          theme = { wave = {}, lotus = {}, dragon = {}, all = {} },
+        },
+        overrides = function(colors) -- add/modify highlights
+          return {}
+        end,
+        theme = "dragon",  -- Load "dragon" theme when 'background' option is not set
+        background = {   -- map the value of 'background' option to a theme
+          dark = "dragon", -- try "dragon" !
+          light = "lotus"
+        },
       })
-      require('onedark').load()
+      vim.cmd("colorscheme kanagawa")
       vim.o.bg = 'dark'
     end
   }
 end
-
