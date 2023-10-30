@@ -14,12 +14,12 @@ return {
         html = { "prettier" },
         json = { "prettier" },
       },
-      format_on_save = {
-        lsp_fallback = true,
-        async = false,
-      }
+      -- format_on_save = {
+      --   lsp_fallback = true,
+      --   async = false,
+      -- }
     })
-    vim.keymap.set({ "n", "v" }, "<leader>mp", function()
+    vim.keymap.set({ "n", "v" }, "<leader>d", function()
       conform.format({
         lsp_fallback = true,
         async = false,
