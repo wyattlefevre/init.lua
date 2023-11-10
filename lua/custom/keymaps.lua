@@ -1,4 +1,4 @@
-local default_opts = {noremap = true, silent = true}
+local default_opts = { noremap = true, silent = true }
 vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 
 -- Remap for dealing with word wrap
@@ -33,3 +33,5 @@ vim.keymap.set('n', 'G', 'Gzz')
 
 -- Refresh buffer
 vim.keymap.set('n', '<leader>rb', ':e!<CR>')
+
+vim.keymap.set('n', '<leader>p', ':let @+ = expand(\'%\')<CR>')

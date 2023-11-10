@@ -14,6 +14,27 @@ if envTheme == "LIGHT" then
       vim.o.bg = 'light'
     end
   }
+  -- return {
+  --   'Mofiqul/vscode.nvim',
+  --   config = function()
+  --     require('vscode').setup({
+  --       -- Alternatively set style in setup
+  --       style = 'light',
+  --
+  --       -- Enable transparent background
+  --       transparent = true,
+  --
+  --       -- Enable italic comment
+  --       italic_comments = true,
+  --
+  --       -- Disable nvim-tree background color
+  --       -- disable_nvimtree_bg = true,
+  --
+  --     })
+  --     require('vscode').load()
+  --     vim.o.bg = 'light'
+  --   end
+  -- }
 else
   if darkTheme == "onedark" then
     return {
@@ -69,7 +90,8 @@ else
         require("gruvbox").setup({
           undercurl = true,
           underline = true,
-          bold = true, italic = {
+          bold = true,
+          italic = {
             strings = true,
             comments = true,
             operators = false,
@@ -81,7 +103,7 @@ else
           invert_tabline = false,
           invert_intend_guides = false,
           inverse = true, -- invert background for search, diffs, statuslines and errors
-          contrast = "", -- can be "hard", "soft" or empty string
+          contrast = "",  -- can be "hard", "soft" or empty string
           palette_overrides = {},
           overrides = {},
           dim_inactive = false,
