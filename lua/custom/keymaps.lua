@@ -30,6 +30,7 @@ vim.keymap.set('n', 'n', 'nzz')
 vim.keymap.set('n', 'N', 'Nzz')
 
 vim.keymap.set('n', 'G', 'Gzz')
+vim.keymap.set('n', '<CR>', 'zz')
 
 -- Refresh buffer
 vim.keymap.set('n', '<leader>rb', ':e!<CR>')
