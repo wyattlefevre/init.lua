@@ -126,7 +126,7 @@ require('lazy').setup({
           {
             'filename',
             path = 1,
-            color = { fg = 'black', bg = 'white', gui = 'italic,bold' },
+            color = { fg = 'black', bg = 'white' },
           }
         }
       }
