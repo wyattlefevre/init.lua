@@ -8,7 +8,7 @@ if envTheme == "LIGHT" then
       require('onedark').setup({
         style = 'light',
         transparent = true, -- Show/hide background
-        toggle_style_key = '<leader>ts'
+        -- toggle_style_key = '<leader>ts'
       })
       require('onedark').load()
       vim.o.bg = 'light'
@@ -43,7 +43,7 @@ else
         require('onedark').setup({
           style = 'dark',
           transparent = true, -- Show/hide background
-          toggle_style_key = '<leader>ts'
+          -- toggle_style_key = '<leader>ts'
         })
         require('onedark').load()
         vim.o.bg = 'dark'

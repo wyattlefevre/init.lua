@@ -36,3 +36,7 @@ vim.keymap.set('n', '<CR>', 'zz')
 vim.keymap.set('n', '<leader>rb', ':e!<CR>')
 
 vim.keymap.set('n', '<leader>p', ':let @+ = expand(\'%\')<CR>')
+
+-- Exit Terminal mode with ESC
+vim.api.nvim_set_keymap('t', '<Esc>', '<C-\\><C-n>', { noremap = true })
+
