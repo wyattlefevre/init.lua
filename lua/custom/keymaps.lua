@@ -8,6 +8,8 @@ vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = tr
 -- Switch panes
 vim.keymap.set('n', '<S-h>', "<C-w>h", default_opts)
 vim.keymap.set('n', '<S-l>', "<C-w>l", default_opts)
+vim.keymap.set('n', '<C-k>', "<C-w>k", default_opts)
+vim.keymap.set('n', '<C-j>', "<C-w>j", default_opts)
 
 -- Close pane
 vim.keymap.set('n', '<C-w>', ':close<CR>', default_opts)
