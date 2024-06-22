@@ -14,7 +14,7 @@ return {
     end,
     open_mapping = [[<leader>;]],
     hide_numbers = true,
-    direction = 'vertical',
+    direction = 'horizontal',
     insert_mappings = false,
   },
 }
