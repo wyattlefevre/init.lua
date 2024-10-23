@@ -8,7 +8,7 @@ return {
     workspaces = {
       {
         name = "Wydocs",
-        path = "~/syncthing/Wydocs2",
+        path = "~/wydocs",
       },
     },
     mappings = {
