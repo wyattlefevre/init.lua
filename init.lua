@@ -495,10 +495,12 @@ end
 --  define the property 'filetypes' to the map in question.
 local servers = {
   -- clangd = {},
-  -- gopls = {},
+  gopls = {},
   -- pyright = {},
   -- rust_analyzer = {},
-  -- tsserver = {},
+  ts_ls = {},
+  tailwindcss = {},
+  eslint = {},
   -- html = { filetypes = { 'html', 'twig', 'hbs'} },
 
   lua_ls = {
@@ -542,6 +544,9 @@ require('luasnip.loaders.from_vscode').lazy_load()
 luasnip.config.setup {}
 
 cmp.setup {
+  performance = {
+    max_view_entries = 15
+  },
   snippet = {
     expand = function(args)
       luasnip.lsp_expand(args.body)
