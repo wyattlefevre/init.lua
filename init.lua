@@ -495,11 +495,10 @@ end
 --  define the property 'filetypes' to the map in question.
 local servers = {
   -- clangd = {},
-  gopls = {},
+  -- gopls = {},
   -- pyright = {},
   -- rust_analyzer = {},
   ts_ls = {},
-  tailwindcss = {},
   eslint = {},
   -- html = { filetypes = { 'html', 'twig', 'hbs'} },
 
@@ -545,6 +544,7 @@ luasnip.config.setup {}
 
 cmp.setup {
   performance = {
+    debounce = 100,
     max_view_entries = 15
   },
   snippet = {
