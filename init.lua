@@ -60,6 +60,7 @@ require('lazy').setup({
   {
     -- Autocompletion
     'hrsh7th/nvim-cmp',
+    lazy = true,
     dependencies = {
       -- Snippet Engine & its associated nvim-cmp source
       'L3MON4D3/LuaSnip',
@@ -78,6 +79,7 @@ require('lazy').setup({
   {
     -- Adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
+    lazy = true,
     opts = {
       -- See `:help gitsigns.txt`
       signs = {
@@ -116,6 +118,7 @@ require('lazy').setup({
   {
     -- Set lualine as statusline
     'nvim-lualine/lualine.nvim',
+    lazy = true,
     -- See `:help lualine.txt`
     opts = {
       options = {
@@ -173,6 +176,7 @@ require('lazy').setup({
   {
     -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
+    lazy = true,
     dependencies = {
       'nvim-treesitter/nvim-treesitter-textobjects',
     },
