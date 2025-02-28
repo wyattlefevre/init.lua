@@ -1,59 +1,138 @@
 return {
-    {
-        'nvim-telescope/telescope.nvim',
-        -- pull a specific version of the plugin
-        tag = '0.1.6',
-        dependencies = {
-            -- general purpose plugin used to build user interfaces in neovim plugins
-            'nvim-lua/plenary.nvim'
-        },
-        config = function()
-            -- get access to telescopes built in functions
-            local builtin = require('telescope.builtin')
+	"nvim-telescope/telescope.nvim",
+	branch = "0.1.x",
+	dependencies = {
+		"nvim-lua/plenary.nvim",
+		"ThePrimeagen/harpoon",
+		-- Fuzzy Finder Algorithm which requires local dependencies to be built.
+		-- Only load if `make` is available. Make sure you have the system
+		-- requirements installed.
+		{
+			"nvim-telescope/telescope-fzf-native.nvim",
+			-- NOTE: If you are having trouble with this installation,
+			--       refer to the README for telescope-fzf-native for more instructions.
+			build = "make",
+			cond = function()
+				return vim.fn.executable("make") == 1
+			end,
+		},
+	},
+	opts = function()
+		local actions = require("telescope.actions")
+		return {
+			defaults = {
+				prompt_prefix = " ",
+				selection_caret = " ",
+				path_display = { "smart" },
 
-            -- set a vim motion to <Space> + f + f to search for files by their names
-            vim.keymap.set('n', '<leader>ff', builtin.find_files, {desc = "[F]ind [F]iles"})
-            -- set a vim motion to <Space> + f + g to search for files based on the text inside of them
-            vim.keymap.set('n', '<leader>fg', builtin.live_grep, {desc = "[F]ind by [G]rep"})
-            -- set a vim motion to <Space> + f + d to search for Code Diagnostics in the current project
-            vim.keymap.set('n', '<leader>fd', builtin.diagnostics, { desc = '[F]ind [D]iagnostics' })
-            -- set a vim motion to <Space> + f + r to resume the previous search
-            vim.keymap.set('n', '<leader>fr', builtin.resume, { desc = '[F]inder [R]esume' })
-            -- set a vim motion to <Space> + f + . to search for Recent Files
-            vim.keymap.set('n', '<leader>f.', builtin.oldfiles, { desc = '[F]ind Recent Files ("." for repeat)' })
-            -- set a vim motion to <Space> + f + b to search Open Buffers
-            vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = '[F]ind Existing [B]uffers' })
-        end
-    },
-    {
-        'nvim-telescope/telescope-ui-select.nvim',
-        config = function()
-            -- get access to telescopes navigation functions
-            local actions = require("telescope.actions")
+				mappings = {
+					i = {
+						["<C-n>"] = actions.cycle_history_next,
+						["<C-p>"] = actions.cycle_history_prev,
 
-            require("telescope").setup({
-                -- use ui-select dropdown as our ui
-                extensions = {
-                    ["ui-select"] = {
-                        require("telescope.themes").get_dropdown {}
-                    }
-                },
-                -- set keymappings to navigate through items in the telescope io
-                mappings = {
-                    i = {
-                         -- use <cltr> + n to go to the next option
-                        ["<C-n>"] = actions.cycle_history_next,
-                        -- use <cltr> + p to go to the previous option
-                        ["<C-p>"] = actions.cycle_history_prev,
-                        -- use <cltr> + j to go to the next preview
-                        ["<C-j>"] = actions.move_selection_next,
-                        -- use <cltr> + k to go to the previous preview
-                        ["<C-k>"] = actions.move_selection_previous,
-                    }
-                },
-                -- load the ui-select extension
-                require("telescope").load_extension("ui-select")
-            })
-        end
-    }
+						["<C-j>"] = actions.move_selection_next,
+						["<C-k>"] = actions.move_selection_previous,
+
+						["<C-c>"] = actions.close,
+
+						["<Down>"] = actions.move_selection_next,
+						["<Up>"] = actions.move_selection_previous,
+
+						["<CR>"] = actions.select_default,
+						["<C-x>"] = actions.select_horizontal,
+						["<C-v>"] = actions.select_vertical,
+						["<C-t>"] = actions.select_tab,
+
+						["<C-u>"] = actions.preview_scrolling_up,
+						["<C-d>"] = actions.preview_scrolling_down,
+
+						["<PageUp>"] = actions.results_scrolling_up,
+						["<PageDown>"] = actions.results_scrolling_down,
+
+						["<Tab>"] = actions.toggle_selection + actions.move_selection_worse,
+						["<S-Tab>"] = actions.toggle_selection + actions.move_selection_better,
+						["<C-q>"] = actions.send_to_qflist + actions.open_qflist,
+						["<M-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
+						["<C-l>"] = actions.complete_tag,
+						["<C-_>"] = actions.which_key, -- keys from pressing <C-/>
+					},
+
+					n = {
+						["<esc>"] = actions.close,
+						["<CR>"] = actions.select_default,
+						["<C-x>"] = actions.select_horizontal,
+						["<C-v>"] = actions.select_vertical,
+						["<C-t>"] = actions.select_tab,
+
+						["<Tab>"] = actions.toggle_selection + actions.move_selection_worse,
+						["<S-Tab>"] = actions.toggle_selection + actions.move_selection_better,
+						["<C-q>"] = actions.send_to_qflist + actions.open_qflist,
+						["<M-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
+
+						["j"] = actions.move_selection_next,
+						["k"] = actions.move_selection_previous,
+						["H"] = actions.move_to_top,
+						["M"] = actions.move_to_middle,
+						["L"] = actions.move_to_bottom,
+
+						["<Down>"] = actions.move_selection_next,
+						["<Up>"] = actions.move_selection_previous,
+						["gg"] = actions.move_to_top,
+						["G"] = actions.move_to_bottom,
+
+						["<C-u>"] = actions.preview_scrolling_up,
+						["<C-d>"] = actions.preview_scrolling_down,
+
+						["<PageUp>"] = actions.results_scrolling_up,
+						["<PageDown>"] = actions.results_scrolling_down,
+
+						["?"] = actions.which_key,
+					},
+				},
+			},
+		}
+	end,
+	config = function(_, opts)
+		local telescope = require("telescope")
+		telescope.setup(opts)
+
+		-- Load Extensions
+		pcall(telescope.load_extension, "fzf")
+		pcall(telescope.load_extension, "harpoon")
+
+		-- Keybindings
+		local builtin = require("telescope.builtin")
+		vim.keymap.set("n", "<leader>?", builtin.oldfiles, { desc = "[?] Find recently opened files" })
+		vim.keymap.set("n", "<leader>b", builtin.buffers, { desc = "[ ] Find existing buffers" })
+		vim.keymap.set("n", "<leader>/", function()
+			builtin.current_buffer_fuzzy_find(require("telescope.themes").get_dropdown({
+				winblend = 10,
+				previewer = false,
+			}))
+		end, { desc = "[/] Fuzzily search in current buffer" })
+
+		vim.keymap.set("n", "<leader>gf", builtin.git_files, { desc = "Search [G]it [F]iles" })
+		vim.keymap.set("n", "<leader>f", function()
+			builtin.find_files({
+				find_command = {
+					"rg",
+					"-u",
+					"--files",
+					"--hidden",
+					"-g",
+					"!.git",
+					"-g",
+					"!node_modules/**",
+					"-g",
+					"!.next/**",
+				},
+			})
+		end, { desc = "[S]earch [F]iles" })
+
+		vim.keymap.set("n", "<leader>sh", builtin.help_tags, { desc = "[S]earch [H]elp" })
+		vim.keymap.set("n", "<leader>sw", builtin.grep_string, { desc = "[S]earch current [W]ord" })
+		vim.keymap.set("n", "<leader>sg", builtin.live_grep, { desc = "[S]earch by [G]rep" })
+		vim.keymap.set("n", "<leader>sr", builtin.resume, { desc = "[S]earch resume" })
+		vim.keymap.set("n", "<leader>sd", builtin.diagnostics, { desc = "[S]earch [D]iagnostics" })
+	end,
 }

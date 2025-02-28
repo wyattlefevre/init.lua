@@ -1,25 +1,99 @@
 return {
-    "nvim-treesitter/nvim-treesitter",
-    dependencies = {
-        -- ts-autotag utilizes treesitter to understand the code structure to automatically close tsx tags
-        "windwp/nvim-ts-autotag"
-    },
-    -- when the plugin builds run the TSUpdate command to ensure all our servers are installed and updated
-    build = ':TSUpdate',
-    config = function()
-        -- gain access to the treesitter config functions
-        local ts_config = require("nvim-treesitter.configs")
+	-- Highlight, edit, and navigate code
+	"nvim-treesitter/nvim-treesitter",
+	lazy = true,
+	dependencies = {
+		"nvim-treesitter/nvim-treesitter-textobjects",
+		"windwp/nvim-ts-autotag",
+	},
+	build = ":TSUpdate",
+	config = function()
+		-- gain access to the treesitter config functions
+		local ts_config = require("nvim-treesitter.configs")
 
-        -- call the treesitter setup function with properties to configure our experience
-        ts_config.setup({
-            -- make sure we have vim, vimdoc, lua, java, javascript, typescript, html, css, json, tsx, markdown, markdown, inline markdown and gitignore highlighting servers
-            ensure_installed = {"vim", "vimdoc", "lua", "java", "javascript", "typescript", "html", "css", "json", "tsx", "markdown", "markdown_inline", "gitignore"},
-            -- make sure highlighting it anabled
-            highlight = {enable = true},
-            -- enable tsx auto closing tag creation
-            autotag = {
-                enable = true
-            }
-        })
-    end
+		-- call the treesitter setup function with properties to configure our experience
+		ts_config.setup({
+			-- Add languages to be installed here that you want installed for treesitter
+			ensure_installed = {
+				"c",
+				"cpp",
+				"go",
+				"lua",
+				"python",
+				"rust",
+				"tsx",
+				"javascript",
+				"typescript",
+				"vim",
+				"java",
+				"html",
+				"css",
+				"markdown",
+				"markdown_inline",
+				"gitignore",
+			},
+
+			-- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
+			auto_install = false,
+
+			highlight = { enable = true },
+			indent = { enable = true },
+			incremental_selection = {
+				enable = true,
+				keymaps = {
+					init_selection = "<c-space>",
+					node_incremental = "<c-space>",
+					scope_incremental = "<c-s>",
+					node_decremental = "<M-space>",
+				},
+			},
+			textobjects = {
+				select = {
+					enable = true,
+					lookahead = true, -- Automatically jump forward to textobj, similar to targets.vim
+					keymaps = {
+						-- You can use the capture groups defined in textobjects.scm
+						["aa"] = "@parameter.outer",
+						["ia"] = "@parameter.inner",
+						["af"] = "@function.outer",
+						["if"] = "@function.inner",
+						["ac"] = "@class.outer",
+						["ic"] = "@class.inner",
+					},
+				},
+				move = {
+					enable = true,
+					set_jumps = true, -- whether to set jumps in the jumplist
+					goto_next_start = {
+						["]m"] = "@function.outer",
+						["]]"] = "@class.outer",
+					},
+					goto_next_end = {
+						["]M"] = "@function.outer",
+						["]["] = "@class.outer",
+					},
+					goto_previous_start = {
+						["[m"] = "@function.outer",
+						["[["] = "@class.outer",
+					},
+					goto_previous_end = {
+						["[M"] = "@function.outer",
+						["[]"] = "@class.outer",
+					},
+				},
+				swap = {
+					enable = true,
+					swap_next = {
+						["<leader>a"] = "@parameter.inner",
+					},
+					swap_previous = {
+						["<leader>A"] = "@parameter.inner",
+					},
+				},
+			},
+			autotag = {
+				enable = true,
+			},
+		})
+	end,
 }
