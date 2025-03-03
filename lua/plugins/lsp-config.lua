@@ -2,23 +2,19 @@ return {
 	{
 		"williamboman/mason.nvim",
 		config = function()
-			-- setup mason with default properties
 			require("mason").setup()
 		end,
 	},
-	-- mason lsp config utilizes mason to automatically ensure lsp servers you want installed are installed
 	{
 		"williamboman/mason-lspconfig.nvim",
+		dependencies = {
+			'nvim-telescope/telescope.nvim'
+		},
 		config = function()
-			-- [[ Configure LSP ]]
 			--  This function gets run when an LSP connects to a particular buffer.
+			local telescope = require('telescope.builtin')
 			local on_attach = function(_, bufnr)
-				-- NOTE: Remember that lua is a real programming language, and as such it is possible
-				-- to define small helper and utility functions so you don't have to repeat yourself
-				-- many times.
-				--
-				-- In this case, we create a function that lets us more easily define mappings specific
-				-- for LSP related items. It sets the mode, buffer and description for us each time.
+				-- sets the mode, buffer and description for us each time.
 				local nmap = function(keys, func, desc)
 					if desc then
 						desc = "LSP: " .. desc
@@ -56,14 +52,8 @@ return {
 			end
 
 			local servers = {
-				-- clangd = {},
-				-- gopls = {},
-				-- pyright = {},
-				-- rust_analyzer = {},
 				ts_ls = {},
 				eslint = {},
-				-- html = { filetypes = { 'html', 'twig', 'hbs'} },
-
 				lua_ls = {
 					Lua = {
 						workspace = { checkThirdParty = false },
@@ -77,8 +67,14 @@ return {
 				ensure_installed = vim.tbl_keys(servers),
 			})
 
+			local capabilities = vim.lsp.protocol.make_client_capabilities()
+			capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 			require("mason-lspconfig").setup_handlers({
 				function(server_name)
+					-- we do jdtls setup separately because it is very involved (see the config.jdtls)
+					if server_name == "jdtls" then
+						return
+					end
 					require("lspconfig")[server_name].setup({
 						capabilities = capabilities,
 						on_attach = on_attach,
