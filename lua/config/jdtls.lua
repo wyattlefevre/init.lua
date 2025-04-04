@@ -188,9 +188,10 @@ local function setup_jdtls()
 			-- Enable code formatting
 			format = {
 				enabled = true,
-				-- Use the Google Style guide for code formattingh
+				-- Use the Google Style guide for code formatting
 				settings = {
-					url = vim.fn.stdpath("config") .. "/lang_servers/intellij-java-google-style.xml",
+					url = vim.fn.stdpath("config") .. "/../intellij-java-google-style.xml",
+
 					profile = "GoogleStyle",
 				},
 			},
@@ -212,7 +213,7 @@ local function setup_jdtls()
 			},
 			-- Setup automatical package import oranization on file save
 			saveActions = {
-				organizeImports = true,
+				organizeImports = false,
 			},
 			-- Customize completion options
 			completion = {
@@ -287,7 +288,7 @@ local function setup_jdtls()
 	}
 
 	-- Function that will be ran once the language server is attached
-	local telescope = require('telescope.builtin')
+	local telescope = require("telescope.builtin")
 	local on_attach = function(_, bufnr)
 		-- Map the Java specific key mappings once the server is attached
 		java_keymaps()

@@ -125,6 +125,16 @@ return {
 					"!node_modules/**",
 					"-g",
 					"!.next/**",
+					"-g",
+					"!bin/**",
+					"-g",
+					"!build/**",
+					"-g",
+					"!api/build/**",
+					"-g",
+					"!api/bin/**",
+					"-g",
+					"!**.class",
 				},
 			})
 		end, { desc = "[S]earch [F]iles" })

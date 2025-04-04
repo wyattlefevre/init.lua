@@ -16,7 +16,5 @@ local lazy_opts = {
 }
 
 require("lazy").setup({
-	-- Detect tabstop and shiftwidth automatically
-	"tpope/vim-sleuth",
 	{ import = "plugins" },
 }, lazy_opts)
