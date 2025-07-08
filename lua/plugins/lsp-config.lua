@@ -8,11 +8,11 @@ return {
 	{
 		"williamboman/mason-lspconfig.nvim",
 		dependencies = {
-			'nvim-telescope/telescope.nvim'
+			"nvim-telescope/telescope.nvim",
 		},
 		config = function()
 			--  This function gets run when an LSP connects to a particular buffer.
-			local telescope = require('telescope.builtin')
+			local telescope = require("telescope.builtin")
 			local on_attach = function(_, bufnr)
 				-- sets the mode, buffer and description for us each time.
 				local nmap = function(keys, func, desc)
@@ -60,7 +60,7 @@ return {
 						telemetry = { enable = false },
 					},
 				},
-				jdtls = {},
+				jdtls = {}
 			}
 			-- ensure that we have lua language server, typescript launguage server, java language server, and java test language server are installed
 			require("mason-lspconfig").setup({
