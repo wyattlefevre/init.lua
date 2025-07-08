@@ -69,20 +69,21 @@ return {
 
 			local capabilities = vim.lsp.protocol.make_client_capabilities()
 			capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
-			require("mason-lspconfig").setup_handlers({
-				function(server_name)
-					-- we do jdtls setup separately because it is very involved (see the config.jdtls)
-					if server_name == "jdtls" then
-						return
-					end
-					require("lspconfig")[server_name].setup({
+
+			-- Configure each server via vim.lsp.config()
+			for server_name, server_opts in pairs(servers) do
+				-- we do jdtls setup separately because it is very involved (see the config.jdtls)
+				if server_name ~= "jdtls" then
+					vim.lsp.config(server_name, {
 						capabilities = capabilities,
 						on_attach = on_attach,
-						settings = servers[server_name],
-						filetypes = (servers[server_name] or {}).filetypes,
+						settings = server_opts,
+						filetypes = (server_opts or {}).filetypes,
 					})
-				end,
-			})
+				end
+			end
+
+			require("mason-lspconfig").setup()
 		end,
 	},
 	-- mason nvim dap utilizes mason to automatically ensure debug adapters you want installed are installed, mason-lspconfig will not automatically install debug adapters for us

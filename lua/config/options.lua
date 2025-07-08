@@ -14,6 +14,9 @@ vim.o.timeoutlen = 300
 vim.o.completeopt = "menuone,noselect"
 vim.o.termguicolors = true
 vim.o.swapfile = false
+vim.o.tabstop = 2        -- Display width of a tab character
+vim.o.softtabstop = 2    -- Editing operations treat tab as 2 spaces
+vim.o.shiftwidth = 2     -- Indent operations use 2 spaces
 
 -- Highlight on yank
 local highlight_group = vim.api.nvim_create_augroup("YankHighlight", { clear = true })
