@@ -3,7 +3,6 @@ require("config.lazy")
 -- Sandwich configs between lazy install and lazy .setup() method
 require("config.options")
 require("config.keymaps")
-require("config.autocmds")
 
 local lazy_opts = {
 	change_detection = {
