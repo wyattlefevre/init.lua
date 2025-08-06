@@ -4,7 +4,6 @@ return {
 	lazy = true,
 	dependencies = {
 		"nvim-treesitter/nvim-treesitter-textobjects",
-		"windwp/nvim-ts-autotag",
 	},
 	build = ":TSUpdate",
 	config = function()
@@ -90,9 +89,6 @@ return {
 						["<leader>A"] = "@parameter.inner",
 					},
 				},
-			},
-			autotag = {
-				enable = true,
 			},
 		})
 	end,
