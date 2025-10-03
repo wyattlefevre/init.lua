@@ -1,4 +1,5 @@
 return {
+	{ "nvim-java/nvim-java", config = function() require("java").setup() end },
 	{
 		"williamboman/mason.nvim",
 		config = function()
@@ -85,7 +86,11 @@ return {
 	{
 		-- LSP Configuration & Plugins
 		"neovim/nvim-lspconfig",
+		config = function()
+			vim.lsp.config('jdtls', {})
+		end,
 		dependencies = {
+			"nvim-java/nvim-java",
 			-- Automatically install LSPs to stdpath for neovim
 			{ "williamboman/mason.nvim", config = true },
 			"williamboman/mason-lspconfig.nvim",

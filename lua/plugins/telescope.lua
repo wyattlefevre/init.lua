@@ -23,7 +23,7 @@ return {
 			defaults = {
 				prompt_prefix = " ",
 				selection_caret = " ",
-				path_display = { "smart" },
+				path_display = { shorten = 7 },
 
 				mappings = {
 					i = {
@@ -136,7 +136,7 @@ return {
 					"-g",
 					"!**.class",
 				},
-				path_display = { truncate = 4 }, -- Only for this picker
+				path_display = { truncate = 1 }, -- Only for this picker
 			})
 		end, { desc = "[S]earch [F]iles" })
 
