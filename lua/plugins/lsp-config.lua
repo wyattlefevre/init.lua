@@ -63,9 +63,8 @@ return {
 				jdtls = {},
 				gopls = {}
 			}
-			-- ensure that we have lua language server, typescript launguage server, java language server, and java test language server are installed
 			require("mason-lspconfig").setup({
-				ensure_installed = vim.tbl_keys(servers),
+				ensure_installed = { "ts_ls", "eslint", "lua_ls" },
 			})
 
 			local capabilities = vim.lsp.protocol.make_client_capabilities()
@@ -73,37 +72,18 @@ return {
 
 			-- Configure each server via vim.lsp.config()
 			for server_name, server_opts in pairs(servers) do
-				-- we do jdtls setup separately because it is very involved (see the config.jdtls)
-				if server_name ~= "jdtls" then
-					vim.lsp.config(server_name, {
-						capabilities = capabilities,
-						on_attach = on_attach,
-						settings = server_opts,
-						filetypes = (server_opts or {}).filetypes,
-					})
-				end
+				vim.lsp.config(server_name, {
+					capabilities = capabilities,
+					on_attach = on_attach,
+					settings = server_opts,
+					filetypes = (server_opts or {}).filetypes,
+				})
 			end
 
 			require("mason-lspconfig").setup()
 		end,
 	},
-	-- mason nvim dap utilizes mason to automatically ensure debug adapters you want installed are installed, mason-lspconfig will not automatically install debug adapters for us
-	{
-		"jay-babu/mason-nvim-dap.nvim",
-		config = function()
-			-- ensure the java debug adapter is installed
-			require("mason-nvim-dap").setup({
-				ensure_installed = { "java-debug-adapter", "java-test" },
-			})
-		end,
-	},
-	-- utility plugin for configuring the java language server for us
-	{
-		"mfussenegger/nvim-jdtls",
-		dependencies = {
-			"mfussenegger/nvim-dap",
-		},
-	},
+
 	{
 		-- LSP Configuration & Plugins
 		"neovim/nvim-lspconfig",
@@ -114,7 +94,7 @@ return {
 
 			-- Useful status updates for LSP
 			-- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-			{ "j-hui/fidget.nvim", tag = "legacy", opts = {} },
+			{ "j-hui/fidget.nvim",       tag = "legacy", opts = {} },
 
 			-- Additional lua configuration, makes nvim stuff amazing!
 			"folke/neodev.nvim",

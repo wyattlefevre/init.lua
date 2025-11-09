@@ -136,6 +136,7 @@ return {
 					"-g",
 					"!**.class",
 				},
+				path_display = { truncate = 4 }, -- Only for this picker
 			})
 		end, { desc = "[S]earch [F]iles" })
 

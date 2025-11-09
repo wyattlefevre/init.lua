@@ -6,6 +6,6 @@ return {
 			transparent = true, -- Show/hide background
 		})
 		require("onedark").load()
-		vim.o.bg = "dark"
+		-- vim.o.bg = "dark"
 	end,
 }
