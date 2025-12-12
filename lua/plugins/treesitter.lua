@@ -30,6 +30,7 @@ return {
 				"markdown",
 				"markdown_inline",
 				"gitignore",
+				"todotxt",
 			},
 
 			-- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
@@ -89,6 +90,17 @@ return {
 						["<leader>A"] = "@parameter.inner",
 					},
 				},
+			},
+		})
+
+		vim.filetype.add({
+			filename = {
+				["todo.txt"] = "todotxt",
+				["done.txt"] = "todotxt",
+			},
+			pattern = {
+				[".*/tasks/todo%.txt"] = "todotxt",
+				[".*/tasks/done%.txt"] = "todotxt",
 			},
 		})
 	end,
