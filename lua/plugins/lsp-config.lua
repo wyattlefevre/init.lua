@@ -1,5 +1,4 @@
 return {
-	{ "nvim-java/nvim-java", config = function() require("java").setup() end },
 	{
 		"williamboman/mason.nvim",
 		config = function()
@@ -9,11 +8,35 @@ return {
 	{
 		"williamboman/mason-lspconfig.nvim",
 		dependencies = {
+			"williamboman/mason.nvim",
+		},
+		config = function()
+			-- Automatically install these servers
+			require("mason-lspconfig").setup({
+				ensure_installed = { "ts_ls", "eslint", "lua_ls", "gopls" },
+				automatic_installation = true,
+			})
+		end,
+	},
+	{
+		"neovim/nvim-lspconfig",
+		dependencies = {
+			"williamboman/mason.nvim",
+			"williamboman/mason-lspconfig.nvim",
 			"nvim-telescope/telescope.nvim",
+			{ "j-hui/fidget.nvim", tag = "legacy", opts = {} },
+			"folke/neodev.nvim",
 		},
 		config = function()
 			--  This function gets run when an LSP connects to a particular buffer.
-			local telescope = require("telescope.builtin")
+			local has_telescope, telescope = pcall(require, "telescope.builtin")
+
+			-- Fallback to LSP builtin functions if telescope isn't available
+			local goto_definition = has_telescope and telescope.lsp_definitions or vim.lsp.buf.definition
+			local goto_references = has_telescope and telescope.lsp_references or vim.lsp.buf.references
+			local document_symbols = has_telescope and telescope.lsp_document_symbols or vim.lsp.buf.document_symbol
+			local workspace_symbols = has_telescope and telescope.lsp_dynamic_workspace_symbols or vim.lsp.buf.workspace_symbol
+
 			local on_attach = function(_, bufnr)
 				-- sets the mode, buffer and description for us each time.
 				local nmap = function(keys, func, desc)
@@ -27,16 +50,15 @@ return {
 				nmap("<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
 				nmap("<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction")
 
-				nmap("gd", telescope.lsp_definitions, "[G]oto [D]efinition")
-				nmap("gr", telescope.lsp_references, "[G]oto [R]eferences")
+				nmap("gd", goto_definition, "[G]oto [D]efinition")
+				nmap("gr", goto_references, "[G]oto [R]eferences")
 				nmap("gI", vim.lsp.buf.implementation, "[G]oto [I]mplementation")
 				nmap("gt", vim.lsp.buf.type_definition, "Type [D]efinition")
-				nmap("<leader>ds", telescope.lsp_document_symbols, "[D]ocument [S]ymbols")
-				nmap("<leader>ws", telescope.lsp_dynamic_workspace_symbols, "[W]orkspace [S]ymbols")
+				nmap("<leader>ds", document_symbols, "[D]ocument [S]ymbols")
+				nmap("<leader>ws", workspace_symbols, "[W]orkspace [S]ymbols")
 
 				-- See `:help K` for why this keymap
 				nmap("K", vim.lsp.buf.hover, "Hover Documentation")
-				-- nmap('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
 
 				-- Lesser used LSP functionality
 				nmap("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
@@ -52,6 +74,9 @@ return {
 				end, { desc = "Format current buffer with LSP" })
 			end
 
+			local capabilities = vim.lsp.protocol.make_client_capabilities()
+			capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
+
 			local servers = {
 				ts_ls = {},
 				eslint = {},
@@ -61,17 +86,10 @@ return {
 						telemetry = { enable = false },
 					},
 				},
-				jdtls = {},
 				gopls = {}
 			}
-			require("mason-lspconfig").setup({
-				ensure_installed = { "ts_ls", "eslint", "lua_ls" },
-			})
 
-			local capabilities = vim.lsp.protocol.make_client_capabilities()
-			capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
-
-			-- Configure each server via vim.lsp.config()
+			-- Configure each server using native Neovim 0.11 API
 			for server_name, server_opts in pairs(servers) do
 				vim.lsp.config(server_name, {
 					capabilities = capabilities,
@@ -81,28 +99,7 @@ return {
 				})
 			end
 
-			require("mason-lspconfig").setup()
+			-- mason-lspconfig will automatically call vim.lsp.enable() for installed servers
 		end,
-	},
-
-	{
-		-- LSP Configuration & Plugins
-		"neovim/nvim-lspconfig",
-		config = function()
-			vim.lsp.config('jdtls', {})
-		end,
-		dependencies = {
-			"nvim-java/nvim-java",
-			-- Automatically install LSPs to stdpath for neovim
-			{ "williamboman/mason.nvim", config = true },
-			"williamboman/mason-lspconfig.nvim",
-
-			-- Useful status updates for LSP
-			-- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-			{ "j-hui/fidget.nvim",       tag = "legacy", opts = {} },
-
-			-- Additional lua configuration, makes nvim stuff amazing!
-			"folke/neodev.nvim",
-		},
 	},
 }
